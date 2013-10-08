@@ -1,2 +1,8 @@
 linux-*.tar.xz
+linux-ice*.tar.gz
 patch-*.xz
+tuxonice-for-linux-*.patch.bz2
+TODO
+src
+pkg
+.#*
