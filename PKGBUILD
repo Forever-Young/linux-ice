@@ -7,7 +7,7 @@ pkgbase=linux-ice       # Build kernel with a different name
 _srcname=linux-3.11
 pkgver=3.11.5
 pkgrel=1
-_toipatch=tuxonice-for-linux-3.11.4-2013-10-06.patch
+_toipatch=tuxonice-for-linux-3.11.5-2013-10-15.patch
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -32,7 +32,7 @@ md5sums=('fea363551ff45fbe4cb88497b863b261'
          '98beb36f9b8cf16e58de2483ea9985e3'
          'd50c1ac47394e9aec637002ef3392bd1'
          'b479ae335174532db96aac4b24dff7ea'
-         '507f648d23a16883f29af47b807e2e28')
+         '1e5e9c141d4e1d51226259226ee0db67')
 
 _kernelname=${pkgbase#linux}
 
