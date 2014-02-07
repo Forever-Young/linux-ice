@@ -6,7 +6,7 @@
 pkgbase=linux-ice       # Build kernel with a different name
 _srcname=linux-3.13
 pkgver=3.13.2
-pkgrel=1
+pkgrel=2
 _toipatch=tuxonice-for-linux-head-3.13.0-rc8-2014-01-19.patch
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
@@ -35,8 +35,8 @@ source=("http://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
 
 md5sums=('0ecbaf65c00374eb4a826c2f9f37606f'
          '352993d23acc5760dafa10ffc9d8881a'
-         'ba4468d313adfaf22368add7f58204aa'
-         '035bb27dac306f5c028d96cad14bb249'
+         'f766e5dfb405359215b5adb2b2da5f4e'
+         'ca3c4d253a31bc3edea12c857d3be743'
          'eb14dcfd80c00852ef81ded6e826826a'
          '98beb36f9b8cf16e58de2483ea9985e3'
          'ffd520aa4df63f9d4439270f4dfc16f0'
