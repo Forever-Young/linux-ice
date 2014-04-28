@@ -5,8 +5,8 @@
 #pkgbase=linux               # Build stock -ARCH kernel
 pkgbase=linux-ice       # Build kernel with a different name
 _srcname=linux-3.14
-pkgver=3.14
-pkgrel=2
+pkgver=3.14.1
+pkgrel=1
 _toipatch=tuxonice-for-linux-head-3.14.0-rc6-2014-03-17.patch
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
@@ -14,7 +14,7 @@ license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc')
 options=('!strip')
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
-        #"https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
+        "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
         # the main kernel config files
         'config' 'config.x86_64'
         # standard config files for mkinitcpio ramdisk
@@ -27,13 +27,12 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         '0005-Revert-Bluetooth-Enable-autosuspend-for-Intel-Blueto.patch'
         '0006-genksyms-fix-typeof-handling.patch'
         '0007-x86-efi-Correct-EFI-boot-stub-use-of-code32_start.patch'
-        '0008-futex-avoid-race-between-requeue-and-wake.patch'
-        '0009-iwlwifi-mvm-rs-fix-search-cycle-rules.patch'
         '0010-iwlwifi-mvm-delay-enabling-smart-FIFO-until-after-be.patch'
         "http://tuxonice.net/downloads/all/${_toipatch}.bz2"
 )
 
 sha256sums=('61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa'
+            'ac56f0bff3c6ec436161f2702c7269b933e22bae0488ed709ab29e4aeb78be45'
             '2c17d40a0e4ea0f430df4d7cb2fb9aee88898aa589024bb2bd6bc30b32391fe4'
             '035d32d379972f40309ea0a96094c48e24983bc1dc73af35bfd9aa9ce85f4149'
             'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
@@ -45,8 +44,6 @@ sha256sums=('61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa'
             '3fffb01cf97a5a7ab9601cb277d2468c0fb1e1cceba4225915f3ffae3a5694ec'
             'cf2e7a2d00787f754028e7459688c2755a406e632ce48b60952fa4ff7ed6f4b7'
             'a98bc3836bcf85774a974a1585e6b64432ba8c42363ee484d14515ccd6a88e24'
-            'f8699fcf4242c0727c3c0af56928515cef9b6ce329968537ce2894b30d43eade'
-            '1d4c7b24312ed3781e5d139dfb52f0c22350bf5a2845fe747469dfa7b6ed861f'
             'c0af4622f75c89fef62183e18b7d49998228d4eaa906c6accaf4aa4ff0134f85'
             '3c8d91b192ed58a7b19f27d17d5cf10ef491bac9c7ae96fce24a1b2c69cb681c')
 
@@ -56,7 +53,7 @@ prepare() {
   cd "${srcdir}/${_srcname}"
 
   # add upstream patch
-  #patch -p1 -i "${srcdir}/patch-${pkgver}"
+  patch -p1 -i "${srcdir}/patch-${pkgver}"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
@@ -90,13 +87,6 @@ prepare() {
   # https://git.kernel.org/cgit/linux/kernel/git/mfleming/efi.git/commit/?h=urgent&id=7e8213c1f3acc064aef37813a39f13cbfe7c3ce7
   patch -p1 -i "${srcdir}/0007-x86-efi-Correct-EFI-boot-stub-use-of-code32_start.patch"
 
-  # https://git.kernel.org/cgit/linux/kernel/git/stable/stable-queue.git/tree/queue-3.14/futex-avoid-race-between-requeue-and-wake.patch
-  # FS#39806
-  patch -p1 -i "${srcdir}/0008-futex-avoid-race-between-requeue-and-wake.patch"
-
-  # Fix some intel wifi issues
-  # https://git.kernel.org/cgit/linux/kernel/git/stable/stable-queue.git/tree/queue-3.14/iwlwifi-mvm-rs-fix-search-cycle-rules.patch
-  patch -p1 -i "${srcdir}/0009-iwlwifi-mvm-rs-fix-search-cycle-rules.patch"
   # https://git.kernel.org/cgit/linux/kernel/git/iwlwifi/iwlwifi-fixes.git/commit/?id=12f853a89e29f50b17698e17e73c328a35f1498d
   # FS#39815
   patch -p1 -i "${srcdir}/0010-iwlwifi-mvm-delay-enabling-smart-FIFO-until-after-be.patch"
