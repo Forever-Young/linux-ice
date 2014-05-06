@@ -5,9 +5,9 @@
 #pkgbase=linux               # Build stock -ARCH kernel
 pkgbase=linux-ice       # Build kernel with a different name
 _srcname=linux-3.14
-pkgver=3.14.1
+pkgver=3.14.3
 pkgrel=1
-_toipatch=tuxonice-for-linux-head-3.14.0-rc6-2014-03-17.patch
+_toipatch=tuxonice-for-linux-3.14.2-2014-04-28.patch
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -26,15 +26,18 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         '0004-fs-Don-t-return-0-from-get_anon_bdev.patch'
         '0005-Revert-Bluetooth-Enable-autosuspend-for-Intel-Blueto.patch'
         '0006-genksyms-fix-typeof-handling.patch'
-        '0007-x86-efi-Correct-EFI-boot-stub-use-of-code32_start.patch'
         '0010-iwlwifi-mvm-delay-enabling-smart-FIFO-until-after-be.patch'
+        '0011-kernfs-fix-removed-error-check.patch'
+        '0012-fix-saa7134.patch'
+        '0014-fix-rtl8192se.patch'
+        '0015-fix-xsdt-validation.patch'
         "http://tuxonice.net/downloads/all/${_toipatch}.bz2"
 )
 
 sha256sums=('61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa'
-            'ac56f0bff3c6ec436161f2702c7269b933e22bae0488ed709ab29e4aeb78be45'
-            '2c17d40a0e4ea0f430df4d7cb2fb9aee88898aa589024bb2bd6bc30b32391fe4'
-            '035d32d379972f40309ea0a96094c48e24983bc1dc73af35bfd9aa9ce85f4149'
+            'a26a25739c50d639174698ae498530205b55e5a2b11f8c33ab92a8581bc83fbd'
+            '3673faf5a18c9fc401bc3fe2afb19899426d5c65bb2d7b566b68cd4e8ed120c5'
+            'a37992a7ed5a729944184280699ad4400846b392c529cf83c58884b314dafb3a'
             'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
             'faced4eb4c47c4eb1a9ee8a5bf8a7c4b49d6b4d78efbe426e410730e6267d182'
             '6d72e14552df59e6310f16c176806c408355951724cd5b48a47bf01591b8be02'
@@ -43,9 +46,12 @@ sha256sums=('61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa'
             '1e1ae0f31f722e80da083ecada1f1be57f9ddad133941820c4483b0240e494c1'
             '3fffb01cf97a5a7ab9601cb277d2468c0fb1e1cceba4225915f3ffae3a5694ec'
             'cf2e7a2d00787f754028e7459688c2755a406e632ce48b60952fa4ff7ed6f4b7'
-            'a98bc3836bcf85774a974a1585e6b64432ba8c42363ee484d14515ccd6a88e24'
             'c0af4622f75c89fef62183e18b7d49998228d4eaa906c6accaf4aa4ff0134f85'
-            '3c8d91b192ed58a7b19f27d17d5cf10ef491bac9c7ae96fce24a1b2c69cb681c')
+            '04f44bf5c181d6dc31905937c1bdccb0f5aecaad3a579e99b302502b9cbe0f7a'
+            '79359454c9d8446eb55add2b1cdbf8332bd67dafb01fefb5b1ca090225f64d18'
+            'ff9df6746d7cbfe858d5b4bce932951c26414a7635cb5c26cd8d5c97df36a2a1'
+            '384dd13fd4248fd6809da8c6ae29ced55d4a5cacc33ac2ae7522093ec0fb26d4'
+            'd6c8effaeb7891bf2729c1f0d4ff9ae699c1f5268d0e591907f4bdd880ccf8ce')
 
 _kernelname=${pkgbase#linux}
 
@@ -83,13 +89,28 @@ prepare() {
   # http://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=dc53324060f324e8af6867f57bf4891c13c6ef18
   patch -p1 -i "${srcdir}/0006-genksyms-fix-typeof-handling.patch"
 
-  # Fix the use of code32_start in the EFI boot stub
-  # https://git.kernel.org/cgit/linux/kernel/git/mfleming/efi.git/commit/?h=urgent&id=7e8213c1f3acc064aef37813a39f13cbfe7c3ce7
-  patch -p1 -i "${srcdir}/0007-x86-efi-Correct-EFI-boot-stub-use-of-code32_start.patch"
-
   # https://git.kernel.org/cgit/linux/kernel/git/iwlwifi/iwlwifi-fixes.git/commit/?id=12f853a89e29f50b17698e17e73c328a35f1498d
   # FS#39815
   patch -p1 -i "${srcdir}/0010-iwlwifi-mvm-delay-enabling-smart-FIFO-until-after-be.patch"
+
+  # fix Xorg crash with i810 chipset due to wrong removed error check
+  # References: http://lkml.kernel.org/g/533D01BD.1010200@googlemail.com
+  patch -Np1 -i "${srcdir}/0011-kernfs-fix-removed-error-check.patch"
+
+  # fix saa7134 video
+  # https://bugs.archlinux.org/task/39904
+  # https://bugzilla.kernel.org/show_bug.cgi?id=73361
+  patch -Np1 -i "${srcdir}/0012-fix-saa7134.patch"
+
+  # fix rtl8192se authentification
+  # https://bugs.archlinux.org/task/39858
+  # https://bugzilla.kernel.org/show_bug.cgi?id=74541
+  patch -Np1 -i "${srcdir}/0014-fix-rtl8192se.patch"
+
+  # fix xsdt validation bug
+  # https://bugs.archlinux.org/task/39811
+  # https://bugzilla.kernel.org/show_bug.cgi?id=73911
+  patch -Np1 -i "${srcdir}/0015-fix-xsdt-validation.patch"
 
   # tuxonice patch
   patch -p1 -i "${srcdir}/${_toipatch}"
