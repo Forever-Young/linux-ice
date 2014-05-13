@@ -6,7 +6,7 @@
 pkgbase=linux-ice       # Build kernel with a different name
 _srcname=linux-3.14
 pkgver=3.14.3
-pkgrel=2
+pkgrel=3
 _toipatch=tuxonice-for-linux-3.14.2-2014-04-28.patch
 arch=('i686' 'x86_64')
 url="http://www.kernel.org/"
@@ -15,6 +15,7 @@ makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc')
 options=('!strip')
 source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v3.x/patch-${pkgver}.xz"
+        'CVE-2014-0196.patch'
         # the main kernel config files
         'config' 'config.x86_64'
         # standard config files for mkinitcpio ramdisk
@@ -37,6 +38,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v3.x/${_srcname}.tar.xz"
 
 sha256sums=('61558aa490855f42b6340d1a1596be47454909629327c49a5e4e10268065dffa'
             'a26a25739c50d639174698ae498530205b55e5a2b11f8c33ab92a8581bc83fbd'
+            '56d6dc13617645184e2a14b2ee466ccba5241961953f4950aed7377bc34902d7'
             '3673faf5a18c9fc401bc3fe2afb19899426d5c65bb2d7b566b68cd4e8ed120c5'
             'a37992a7ed5a729944184280699ad4400846b392c529cf83c58884b314dafb3a'
             'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
@@ -62,6 +64,9 @@ prepare() {
 
   # add upstream patch
   patch -p1 -i "${srcdir}/patch-${pkgver}"
+
+  # fix upstream CVE-2014-0196
+  patch -p1 -i "${srcdir}/CVE-2014-0196.patch"
 
   # add latest fixes from stable queue, if needed
   # http://git.kernel.org/?p=linux/kernel/git/stable/stable-queue.git
