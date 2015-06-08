@@ -18,7 +18,7 @@ source=("https://www.kernel.org/pub/linux/kernel/v4.x/${_srcname}.tar.xz"
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}.xz"
         "https://www.kernel.org/pub/linux/kernel/v4.x/patch-${pkgver}.sign"
         # the main kernel config files
-        'config' 'config.x86_64'
+        'config.bz2' 'config.x86_64.bz2'
         # standard config files for mkinitcpio ramdisk
         'linux.preset'
         'change-default-console-loglevel.patch'
@@ -29,8 +29,8 @@ sha256sums=('0f2f7d44979bc8f71c4fc5d3308c03499c26a824dd311fdf6eef4dee0d7d5991'
             'SKIP'
             '60b691210a9e412710e29eac6468d64b6c4d1efc53a6e22878dd51044001adf0'
             'SKIP'
-            'a33ac3308e9bcafd99ab6a51a4429fcb0122b8ffcdb2e7115b52d20f0adb81fc'
-            'cc070af025151db516145d111d6c5c081b933fc9cbbbda394a19d4ea60dd83b7'
+            '0c7d4200f3e75051c5aee69f87f3d16f8522869b6e4da6690a34587958ec8b4c'
+            'f2905ebb9c7fb7deb4852aec83fbf518b879c992252b3e370c5e477f8275d8c3'
             'f0d90e756f14533ee67afda280500511a62465b4f76adcc5effa95a40045179c'
             '1256b241cd477b265a3c2d64bdc19ffe3c9bbcee82ea3994c590c2c76e767d99'
             'fe591fb892e1e4c8438314357e1e78ec2f2f40a68f87f1b334edb5ffe8069dac')
